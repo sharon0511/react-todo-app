@@ -1,18 +1,28 @@
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 export enum Categories {
-  "TO_DO" = "TO_DO",
-  "DOING" = "DOING",
-  "DONE" = "DONE",
+  "TO_DO" = "To Do",
+  "DOING" = "Doing",
+  "DONE" = "Done",
 }
+
+export const customCategoriesAtom = atomWithStorage<string[]>(
+  "customCategories",
+  []
+);
+
+export const allCategories = atom((get) => {
+  return [...Object.values(Categories), ...get(customCategoriesAtom)];
+});
 
 export interface IToDo {
   text: string;
   id: number;
-  category: Categories;
+  category: Categories | string;
 };
 
-export const categoryState = atom<Categories>(Categories.TO_DO);
+export const categoryState = atom<Categories | string>(Categories.TO_DO);
 
 export const toDoState = atom<IToDo[]>([]);
 

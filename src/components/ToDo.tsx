@@ -5,6 +5,7 @@ function ToDo({ text, category, id }: IToDo) {
   console.log('props category:', category, typeof category, 'TO_DO:', Categories.TO_DO, typeof Categories.TO_DO);
 
   const setToDos = useSetAtom(toDoState);
+  
   const onClick = (event:React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
@@ -15,6 +16,19 @@ function ToDo({ text, category, id }: IToDo) {
       return [
         ...oldToDos.slice(0, targetIndex),
         newToDo,
+        ...oldToDos.slice(targetIndex + 1),
+      ];
+    });
+  };
+
+  const onDele = (event:React.MouseEvent<HTMLButtonElement>) => {
+    const {
+      currentTarget: { name },
+    } = event;
+    setToDos(oldToDos => {
+      const targetIndex = oldToDos.findIndex(toDo => toDo.id === id);
+      return [
+        ...oldToDos.slice(0, targetIndex),
         ...oldToDos.slice(targetIndex + 1),
       ];
     });
@@ -38,6 +52,9 @@ function ToDo({ text, category, id }: IToDo) {
           Done
         </button>
       )}
+      <button onClick={onDele}>
+        Delete
+      </button>
     </li>);
 }
 
